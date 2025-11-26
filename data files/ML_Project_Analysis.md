@@ -50,14 +50,14 @@
 
 ## Critical Questions for Project Scope
 
-### ❓ Question 1: Target Variable
+### Question 1: Target Variable
 **What exactly do you want to predict?**
 - **Option A**: Actual ridership counts (number of people boarding at each stop)
-  - ⚠️ **Challenge**: We don't have actual ridership data in the current dataset
+  - **Challenge**: We don't have actual ridership data in the current dataset
   - **Solution**: Would need to obtain ridership data from transit authority
   
 - **Option B**: Demand scores (using existing `Overall_Demand` or similar metrics)
-  - ✅ **Advantage**: Data already available
+  - **Advantage**: Data already available
   - **Use case**: Identify high-demand areas for new stops
   
 - **Option C**: Predict demand at bus stop level (aggregate DA-level data to stops)
@@ -65,14 +65,14 @@
 
 **Recommendation**: Start with Option C to build the model, then refine when actual ridership data is available.
 
-### ❓ Question 2: Prediction Granularity
+### Question 2: Prediction Granularity
 **At what level do you want predictions?**
 - Individual bus stops (1,932 stops)
 - Census DA areas (145 areas)
 - Route segments
 - Time-based (hourly/daily/weekly patterns)
 
-### ❓ Question 3: Temporal Dimension
+### Question 3: Temporal Dimension
 **Do you need time-based predictions?**
 - Current data appears to be static (snapshot in time)
 - For realistic predictions, you'd need:
@@ -81,7 +81,7 @@
   - Season/weather
   - Special events
 
-### ❓ Question 4: Feature Engineering Priorities
+### Question 4: Feature Engineering Priorities
 **Which factors are most important to you?**
 1. **Spatial Features**:
    - Distance to nearest healthcare facilities
@@ -149,18 +149,18 @@
 
 ## Data Quality Assessment
 
-### ✅ Strengths
+### Strengths
 - Good spatial coverage (Victoria area)
 - Multiple data sources (demand, network, POI, demographics)
 - Geographic coordinates available for integration
 
-### ⚠️ Limitations
+### Limitations
 - No actual ridership counts (only demand proxies)
 - No temporal data (time of day, day of week)
 - Bus stop coordinates in different projection system
 - Schools data is BC-wide (needs filtering)
 
-### 🔧 Data Gaps to Address
+### Data Gaps to Address
 1. **Actual ridership data** (if available from transit authority)
 2. **Temporal patterns** (hourly/daily ridership)
 3. **Route schedules** (frequency, peak times)
@@ -227,4 +227,5 @@ bus_ridership_prediction/
 4. **Project is fully doable** even without actual ridership data
 
 See `PROJECT_SUMMARY.md` for complete details and `predict_ridership.py` for making predictions on new locations.
+
 
