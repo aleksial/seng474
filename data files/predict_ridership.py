@@ -49,7 +49,7 @@ def calculate_features_for_location(lat, lon, data_dir):
                 'Overall_Accessibility']:
         features[f'nearest_{col}'] = nearest_da[col]
     
-    # 2. Distance to schools
+    # Distance to schools
     schools_df = pd.read_csv(data_dir / "POI" / "schools.csv")
     victoria_bounds = {'lon_min': -123.45, 'lon_max': -123.30, 'lat_min': 48.40, 'lat_max': 48.50}
     victoria_schools = schools_df[
@@ -82,7 +82,7 @@ def calculate_features_for_location(lat, lon, data_dir):
         for buffer_km in [0.5, 1.0, 2.0]:
             features[f'schools_within_{buffer_km}km'] = 0
     
-    # 3. Distance to healthcare
+    # Distance to healthcare
     healthcare_df = pd.read_csv(data_dir / "POI" / "healthcare_facilities.csv")
     gdf_healthcare = gpd.GeoDataFrame(
         healthcare_df,
@@ -102,7 +102,7 @@ def calculate_features_for_location(lat, lon, data_dir):
         count = gdf_healthcare_proj.geometry.within(buffer_zone).sum()
         features[f'healthcare_within_{buffer_km}km'] = count
     
-    # 4. Population features
+    # Population features
     pop_df = pd.read_csv(data_dir / "population" / "victoria_census_da.csv")
     gdf_pop = gpd.GeoDataFrame(
         pop_df,
@@ -133,7 +133,7 @@ def calculate_features_for_location(lat, lon, data_dir):
         for buffer_km in [0.5, 1.0, 2.0]:
             features[f'population_within_{buffer_km}km'] = 0
     
-    # 5. Network features (simplified - would need actual network data)
+    # Network features (simplified - would need actual network data)
     # For new locations, we'll use default/estimated values
     features['route_connections'] = 1  # Default for new stop
     features['bus_stop_density_per_km2'] = 50.0  # Average density
@@ -203,4 +203,5 @@ if __name__ == "__main__":
     print(f"  Population within 1km: {features.get('population_within_1.0km', 0):.0f}")
     
     print("\n" + "=" * 80)
+
 
