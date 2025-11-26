@@ -1,68 +1,131 @@
-# Contribution Title
+```latex
+% This is samplepaper.tex, a sample chapter demonstrating the
+% LLNCS macro package for Springer Computer Science proceedings;
+% Version 2.21 of 2022/01/12
+%
+\documentclass[runningheads]{llncs}
+%
+\usepackage[T1]{fontenc}
+%
+\usepackage{graphicx}
+%
+% \usepackage{color}
+% \renewcommand\UrlFont{\color{blue}\rmfamily}
+% \urlstyle{rm}
 
-**First Author** (Princeton University)  
-ORCID: 0000-1111-2222-3333  
+\begin{document}
 
-**Second Author** (Springer Heidelberg; ABC Institute)  
-ORCID: 1111-2222-3333-4444  
+\title{Contribution Title}
 
-**Third Author** (ABC Institute)  
-ORCID: 2222-3333-4444-5555  
+\author{First Author\inst{1}\orcidID{0000-1111-2222-3333} \and
+Second Author\inst{2,3}\orcidID{1111-2222-3333-4444} \and
+Third Author\inst{3}\orcidID{2222--3333-4444-5555}}
 
----
+\authorrunning{F. Author et al.}
 
-### Author Affiliations
-1. Princeton University, Princeton NJ 08544, USA  
-2. Springer Heidelberg, Tiergartenstr. 17, 69121 Heidelberg, Germany  
-   - Email: lncs@springer.com  
-   - Website: http://www.springer.com/gp/computer-science/lncs  
-3. ABC Institute, Rupert-Karls-University Heidelberg, Heidelberg, Germany  
-   - Email: abc@uni-heidelberg.de, lncs@uni-heidelberg.de
+\institute{Princeton University, Princeton NJ 08544, USA \and
+Springer Heidelberg, Tiergartenstr. 17, 69121 Heidelberg, Germany
+\email{lncs@springer.com}\\
+\url{http://www.springer.com/gp/computer-science/lncs} \and
+ABC Institute, Rupert-Karls-University Heidelberg, Heidelberg, Germany\\
+\email{\{abc,lncs\}@uni-heidelberg.de}}
 
----
+\maketitle
 
-## Abstract
+\begin{abstract}
+The abstract should briefly summarize the contents of the paper in
+150--250 words.
 
-The abstract should briefly summarize the contents of the paper in 150–250 words.
+\keywords{First keyword  \and Second keyword \and Another keyword.}
+\end{abstract}
 
-**Keywords:** First keyword, Second keyword, Another keyword.
-
----
-
-# 1. First Section
-
-## 1.1 A Subsection Sample
-
-Please note that the first paragraph of a section or subsection is not indented. The first paragraph that follows a table, figure, or equation does not need an indent either.
+\section{First Section}
+\subsection{A Subsection Sample}
+Please note that the first paragraph of a section or subsection is
+not indented. The first paragraph that follows a table, figure,
+equation etc. does not need an indent, either.
 
 Subsequent paragraphs, however, are indented.
 
-### Sample Heading (Third Level)
+\subsubsection{Sample Heading (Third Level)} Only two levels of
+headings should be numbered. Lower level headings remain unnumbered;
+they are formatted as run-in headings.
 
-Only two levels of headings should be numbered. Lower-level headings remain unnumbered; they are formatted as run-in headings.
+\paragraph{Sample Heading (Fourth Level)}
+The contribution should contain no more than four levels of
+headings. Table~\ref{tab1} gives a summary of all heading levels.
 
-#### *Sample Heading (Fourth Level)*  
-The contribution should contain no more than four levels of headings.
+\begin{table}
+\caption{Table captions should be placed above the
+tables.}\label{tab1}
+\begin{tabular}{|l|l|l|}
+\hline
+Heading level &  Example & Font size and style\\
+\hline
+Title (centered) &  {\Large\bfseries Lecture Notes} & 14 point, bold\\
+1st-level heading &  {\large\bfseries 1 Introduction} & 12 point, bold\\
+2nd-level heading & {\bfseries 2.1 Printing Area} & 10 point, bold\\
+3rd-level heading & {\bfseries Run-in Heading in Bold.} Text follows & 10 point, bold\\
+4th-level heading & {\itshape Lowest Level Heading.} Text follows & 10 point, italic\\
+\hline
+\end{tabular}
+\end{table}
 
-Table 1 gives a summary of all heading levels.
+\noindent Displayed equations are centered and set on a separate line.
+\begin{equation}
+x + y = z
+\end{equation}
 
----
+Please try to avoid rasterized images for line-art diagrams and
+schemas. Whenever possible, use vector graphics instead (see
+Fig.~\ref{fig1}).
 
-## Table 1 — Heading Levels Summary
+\begin{figure}
+\includegraphics[width=\textwidth]{fig1.eps}
+\caption{A figure caption is always placed below the illustration.
+Please note that short captions are centered, while long ones are
+justified by the macro package automatically.} \label{fig1}
+\end{figure}
 
-**Table captions should be placed above their tables.**
+\begin{theorem}
+This is a sample theorem. The run-in heading is set in bold, while
+the following text appears in italics. Definitions, lemmas,
+propositions, and corollaries are styled the same way.
+\end{theorem}
 
-| Heading Level        | Example                                   | Font Size & Style     |
-|----------------------|---------------------------------------------|------------------------|
-| Title (centered)     | **Lecture Notes**                           | 14 pt bold             |
-| 1st-level heading    | **1 Introduction**                          | 12 pt bold             |
-| 2nd-level heading    | **2.1 Printing Area**                       | 10 pt bold             |
-| 3rd-level heading    | **Run-in Heading in Bold.** Text follows    | 10 pt bold             |
-| 4th-level heading    | *Lowest Level Heading.* Text follows        | 10 pt italic           |
+\begin{proof}
+Proofs, examples, and remarks have the initial word in italics,
+while the following text appears in normal font.
+\end{proof}
 
----
+For citations of references, we prefer the use of square brackets
+and consecutive numbers...
 
-## Displayed Equation
+\begin{credits}
+\subsubsection{\ackname} 
+A bold run-in heading in small font size at the end of the paper is
+used for general acknowledgments.
 
-Displayed equations are centered and placed on their own line:
+\subsubsection{\discintname}
+It is now necessary to declare any competing interests or to
+specifically state that the authors have no competing interests...
+\end{credits}
 
+\begin{thebibliography}{8}
+\bibitem{ref_article1}
+Author, F.: Article title. Journal \textbf{2}(5), 99--110 (2016)
+
+\bibitem{ref_lncs1}
+Author, F., Author, S.: Title of a proceedings paper...
+
+\bibitem{ref_book1}
+Author, F., Author, S., Author, T.: Book title...
+
+\bibitem{ref_proc1}
+Author, A.-B.: Contribution title...
+
+\bibitem{ref_url1}
+LNCS Homepage, \url{http://www.springer.com/lncs}, last accessed 2023/10/25
+\end{thebibliography}
+
+\end{document}
