@@ -1,14 +1,14 @@
-# Bus Ridership Prediction ML Project
+# Bus Ridership Prediction
 
 ## Overview
 
 This project predicts bus ridership at bus stops to help plan new stops and optimize routes. The model uses demand metrics as a proxy for actual ridership (since ridership data is not available) and prioritizes distance to schools and healthcare facilities as key features.
 
-## ✅ Project Status: COMPLETE
+## Project Status: COMPLETE
 
-- **Data Integration**: ✅ Complete (1,930 stops, 31 features)
-- **Model Training**: ✅ Complete (99.7% R² score)
-- **Prediction Tools**: ✅ Ready to use
+- **Data Integration**: Complete (1,930 stops, 31 features)
+- **Model Training**: Complete (99.7% R² score)
+- **Prediction Tools**: Ready to use
 
 ## Quick Start
 
@@ -156,7 +156,8 @@ For questions or issues, refer to:
 
 ---
 
-**Project Status**: ✅ Complete and ready to use
+**Project Status**: Complete and ready to use
 **Model Performance**: Excellent (99.7% R²)
 **Priority Features**: Distance to schools/healthcare included and working
+
 
