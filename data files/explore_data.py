@@ -14,7 +14,7 @@ print("=" * 80)
 print("BUS RIDERSHIP PREDICTION - DATA EXPLORATION")
 print("=" * 80)
 
-# 1. Transit Demand Data
+#Transit Demand Data
 print("\n1. TRANSIT DEMAND DATA")
 print("-" * 80)
 try:
@@ -31,7 +31,7 @@ try:
 except Exception as e:
     print(f"Error loading demand data: {e}")
 
-# 2. Bus Network Nodes
+#Bus Network Nodes
 print("\n\n2. BUS NETWORK NODES (STOPS)")
 print("-" * 80)
 try:
@@ -45,7 +45,7 @@ try:
 except Exception as e:
     print(f"Error loading nodes data: {e}")
 
-# 3. Bus Network Edges
+#Bus Network Edges
 print("\n\n3. BUS NETWORK EDGES (ROUTES)")
 print("-" * 80)
 try:
@@ -56,7 +56,7 @@ try:
 except Exception as e:
     print(f"Error loading edges data: {e}")
 
-# 4. Population Data
+#Population Data
 print("\n\n4. POPULATION DATA")
 print("-" * 80)
 try:
@@ -71,7 +71,7 @@ try:
 except Exception as e:
     print(f"Error loading population data: {e}")
 
-# 5. Healthcare Facilities
+#Healthcare Facilities
 print("\n\n5. HEALTHCARE FACILITIES (POI)")
 print("-" * 80)
 try:
@@ -85,7 +85,7 @@ try:
 except Exception as e:
     print(f"Error loading healthcare data: {e}")
 
-# 6. Schools
+#Schools
 print("\n\n6. SCHOOLS (POI)")
 print("-" * 80)
 try:
@@ -98,7 +98,7 @@ try:
 except Exception as e:
     print(f"Error loading schools data: {e}")
 
-# 7. Data Integration Opportunities
+#Data Integration Opportunities
 print("\n\n7. DATA INTEGRATION OPPORTUNITIES")
 print("-" * 80)
 print("""
@@ -119,4 +119,5 @@ Potential feature engineering:
 print("\n" + "=" * 80)
 print("EXPLORATION COMPLETE")
 print("=" * 80)
+
 
