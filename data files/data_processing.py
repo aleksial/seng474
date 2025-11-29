@@ -272,9 +272,14 @@ nodes_df['bus_stop_density_per_km2'] = nodes_df.index.map(stop_density).fillna(0
 # Combine multiple demand signals
 # Chosen weights are arbitrary
 nodes_df['ridership_proxy'] = (
-    nodes_df['nearest_Overall_Demand'] * 10 +  # Base demand (scaled)
-    nodes_df['nearest_Commute_PT_Demand'] * 5 +  # Transit commuters
-    nodes_df['nearest_Population_Density_Demand'] * 3  # Population density
+    nodes_df['nearest_Overall_Accessibility'] * 10 + 
+    nodes_df['nearest_Commute_PT_Demand'] * 5 + 
+    nodes_df['nearest_Population_Density_Demand'] * 5 +
+    nodes_df['nearest_Bus_Stop_Proximity'] * 3 +
+    nodes_df['population_within_1.0km'] * 2 +
+    nodes_df['schools_within_0.5km'] +
+    nodes_df['healthcare_within_0.5km'] +
+    nodes_df['route_connections']
 )
 
 # Add inverse distance penalties 
