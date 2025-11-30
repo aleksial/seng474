@@ -29,7 +29,7 @@ import warnings
 warnings.filterwarnings('ignore')
 
 print("=" * 80)
-print("BUS RIDERSHIP Forecast - MODEL BUILDING")
+print("BUS RIDERSHIP PREDICTION - MODEL BUILDING")
 print("=" * 80)
 
 # ============================================================================
