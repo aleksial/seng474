@@ -1,7 +1,7 @@
 """
 Machine Learning Models for Bus Ridership Prediction
 Polynomial Regressor - baseline model to fit non-linear data.
-RandomForest Regressor - advance model to capture complex patterns and make predictions.
+RandomForest Regressor - advanced model to capture complex patterns and make predictions.
 """
 
 import pandas as pd
@@ -238,7 +238,11 @@ print("\n" + "=" * 70)
 print("GENERATING VISUALIZATIONS")
 print("=" * 70)
 
+
+#
 # Plot: Predictions comparison
+#
+
 fig, axes = plt.subplots(1, 2, figsize=(15, 5))
 
 # Polynomial Regression
@@ -269,4 +273,27 @@ axes[1].grid(True, alpha=0.3)
 plt.tight_layout()
 plt.savefig('model_predictions_comparison.png', dpi=300, bbox_inches='tight')
 print("Saved: model_predictions_comparison.png")
+plt.close()
+
+
+#
+# Plot: Feature Importance for Random Forest Regression model
+#
+
+importances = rf_model.feature_importances_     # Each importance value represents how much that feature contributes
+feature_names = priority_features               # to reducing prediction error across all trees in the Random Forest.
+
+feat_imp_df = pd.DataFrame({
+    'Feature': feature_names,
+    'Importance': importances
+}).sort_values(by='Importance', ascending=False)
+
+plt.figure(figsize=(10, 6))
+sns.barplot(x='Importance', y='Feature', data=feat_imp_df, palette='viridis')
+plt.title('Feature Importance - Random Forest Model', fontsize=16, fontweight='bold')
+plt.xlabel('Importance', fontsize=12)
+plt.ylabel('Feature', fontsize=12)
+plt.tight_layout()
+plt.savefig('random_forest_feature_importance.png', dpi=300, bbox_inches='tight')
+print("Saved: random_forest_feature_importance.png")
 plt.close()

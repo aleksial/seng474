@@ -79,10 +79,10 @@ def calculate_features_for_coordinates(lat, lon, n_neighbors=5, max_distance_km=
         'route_connections'
     ]
     
-    # Calculate distances to all bus stops
+    # Calculate Cartesian distances to all bus stops
     bus_stops_gdf['distance'] = bus_stops_gdf.geometry.distance(point_geom)
     
-    # Filter stops within max distance
+    # Filter stops within max distance (0.5 longitudinal km ~ 500 meters)
     max_distance_meters = max_distance_km * 1000
     nearby_stops = bus_stops_gdf[bus_stops_gdf['distance'] <= max_distance_meters].copy()
     
@@ -93,11 +93,12 @@ def calculate_features_for_coordinates(lat, lon, n_neighbors=5, max_distance_km=
         # Use up to n_neighbors from the nearby stops
         nearby_stops = nearby_stops.nsmallest(min(n_neighbors, len(nearby_stops)), 'distance')
     
-    # Calculate inverse distance weights (closer stops have more influence)
+    # Calculate inverse distance weights (closer stops have more influence) 
+    # Formula: weight = 1 / distance
     # Add small epsilon to avoid division by zero
     epsilon = 1e-10
     nearby_stops['weight'] = 1 / (nearby_stops['distance'] + epsilon)
-    nearby_stops['weight'] = nearby_stops['weight'] / nearby_stops['weight'].sum()
+    nearby_stops['weight'] = nearby_stops['weight'] / nearby_stops['weight'].sum()   # Normalize weights to sum to 1
     
     # Calculate weighted average for each feature
     features = {}
@@ -107,7 +108,7 @@ def calculate_features_for_coordinates(lat, lon, n_neighbors=5, max_distance_km=
             # This should be the actual distance to the nearest stop
             features[feature] = nearby_stops['distance'].min()
         elif feature in nearby_stops.columns:
-            # Calculate weighted average of the feature from nearby stops
+            # Calculate weighted average of the feature from nearby stops (n neighbors)
             weighted_value = (nearby_stops[feature] * nearby_stops['weight']).sum()
             features[feature] = weighted_value
         else:
@@ -135,7 +136,7 @@ def calculate_features_simple(lat, lon):
     dict : Dictionary containing calculated features
     """
     # Create point geometry
-    point = Point(lon, lat)
+    point = Point(lon, lat) # Note: shapely uses (lon, lat) order
     
     # Create GeoDataFrame with the point
     point_gdf = gpd.GeoDataFrame(
@@ -143,11 +144,11 @@ def calculate_features_simple(lat, lon):
         crs='EPSG:4326'
     )
     
-    # Convert to projected CRS
+    # Convert to projected CRS (Coordinate Reference System)
     point_gdf = point_gdf.to_crs('EPSG:3005')
     point_geom = point_gdf.geometry.iloc[0]
     
-    # Load bus stops data
+    # Load bus stops data with features
     bus_stops_df = pd.read_csv(Path("training_data") / "bus_stops_with_features.csv")
     
     if 'latitude' in bus_stops_df.columns and 'longitude' in bus_stops_df.columns:
@@ -191,7 +192,7 @@ def calculate_features_simple(lat, lon):
     return features
 
 
-def ridership_prediction(lat, lon, use_weighted=True, n_neighbors=5, max_distance_km=1.0):
+def ridership_prediction(lat, lon, use_weighted=True, n_neighbors=5, max_distance_km=0.5):
     """
     Predict ridership for a given coordinate.
     
@@ -208,7 +209,7 @@ def ridership_prediction(lat, lon, use_weighted=True, n_neighbors=5, max_distanc
     n_neighbors : int
         Number of nearby stops to consider for weighted average
     max_distance_km : float
-        Maximum distance to consider stops for weighted average
+        Maximum distance to consider stops for weighted average - use 500 meters by default due to urban density.
     
     Returns:
     --------
@@ -229,19 +230,10 @@ def ridership_prediction(lat, lon, use_weighted=True, n_neighbors=5, max_distanc
         model = model_package
     
     # Calculate features for the coordinates
-    if use_weighted:
-        features = calculate_features_for_coordinates(lat, lon, n_neighbors, max_distance_km)
-    else:
-        features = calculate_features_simple(lat, lon)
-    
-    # Convert features to DataFrame for prediction
-    feature_df = pd.DataFrame([features])
-    
-    # Calculate features for the coordinates
-    if use_weighted:
-        features = calculate_features_for_coordinates(lat, lon, n_neighbors, max_distance_km)
-    else:
-        features = calculate_features_simple(lat, lon)
+    # if use_weighted:
+    features = calculate_features_for_coordinates(lat, lon, n_neighbors, max_distance_km)
+    # else:
+    #    features = calculate_features_simple(lat, lon)
     
     # Convert features to DataFrame for prediction
     feature_df = pd.DataFrame([features])
