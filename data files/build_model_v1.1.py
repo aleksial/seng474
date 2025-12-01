@@ -1,5 +1,5 @@
 """
-Machine Learning Model for Bus Ridership Prediction
+Machine Learning Models for Bus Ridership Prediction
 Polynomial Regressor - baseline model to fit non-linear data.
 RandomForest Regressor - advance model to capture complex patterns and make predictions.
 """
@@ -41,7 +41,8 @@ priority_features = [
     'nearest_Bus_Stop_Proximity',
     'population_within_1.0km',
     'schools_within_0.5km',
-    'healthcare_within_0.5km'
+    'healthcare_within_0.5km',
+    'route_connections'
 ]
 
 target_feature = 'ridership_proxy'
@@ -175,17 +176,17 @@ poly_package = {
 }
 
 # Save Polynomial Regression
-joblib.dump(poly_package, 'polynomial_regression_model.pkl')
-print("Saved: polynomial_regression_model.pkl")
+joblib.dump(poly_package, 'models/polynomial_regression_model.pkl')
+print("Saved: models/polynomial_regression_model.pkl")
 
-# Save Random Forest (production model)
+# Save Random Forest (advanced model)
 rf_package = {
     'model': rf_model,
     'feature_names': priority_features,
     'target_name': target_feature
 }
-joblib.dump(rf_package, 'random_forest_model.pkl')
-print("Saved: random_forest_model.pkl")
+joblib.dump(rf_package, 'models/random_forest_model.pkl')
+print("Saved: models/random_forest_model.pkl")
 
 # ============================================================================
 # 7. MODEL COMPARISON
@@ -252,7 +253,7 @@ axes[0].set_title(f'Polynomial Regression (R²={poly_test_r2:.3f})',
 axes[0].legend()
 axes[0].grid(True, alpha=0.3)
 
-# Random Forest
+# Random Forest Regression
 axes[1].scatter(y_test, y_test_pred_rf, alpha=0.6, edgecolors='k', 
                 linewidth=0.5, color='green')
 axes[1].plot([y_test.min(), y_test.max()], 

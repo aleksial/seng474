@@ -20,7 +20,7 @@ def calculate_features_for_location(lat, lon, data_dir):
     # Create point
     point = Point(lon, lat)
     gdf_point = gpd.GeoDataFrame([1], geometry=[point], crs='EPSG:4326')
-    gdf_point_proj = gdf_point.to_crs('EPSG:32610')
+    gdf_point_proj = gdf_point.to_crs('EPSG:32610')     # EPSG:32610 = UTM Zone 10N: projected CRS for western Canada (Victoria)
     point_proj = gdf_point_proj.geometry.iloc[0]
     point_coords_proj = np.array([[point_proj.x, point_proj.y]])
     
