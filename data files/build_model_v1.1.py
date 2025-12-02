@@ -297,3 +297,23 @@ plt.tight_layout()
 plt.savefig('random_forest_feature_importance.png', dpi=300, bbox_inches='tight')
 print("Saved: random_forest_feature_importance.png")
 plt.close()
+
+#
+# Grid Search Hyperparameter Heatmap
+#
+
+grid_results = pd.DataFrame(grid_search.cv_results_)
+pivot_table = grid_results.pivot_table(
+    values='mean_test_score',
+    index='param_n_estimators',
+    columns='param_max_depth'
+)
+plt.figure(figsize=(8, 6))
+sns.heatmap(pivot_table, annot=True, fmt=".4f", cmap='YlGnBu')
+plt.title('Grid Search CV Mean Test Scores', fontsize=16, fontweight='bold')
+plt.xlabel('Max Depth', fontsize=12)
+plt.ylabel('Number of Estimators', fontsize=12)
+plt.tight_layout()
+plt.savefig('grid_search_cv_heatmap.png', dpi=300, bbox_inches='tight')
+print("Saved: grid_search_cv_heatmap.png")
+plt.close()

@@ -118,81 +118,7 @@ def calculate_features_for_coordinates(lat, lon, n_neighbors=5, max_distance_km=
     
     return features
 
-
-def calculate_features_simple(lat, lon):
-    """
-    Simpler version: Calculate features by using nearest stop values.
-    This is a fallback method if weighted averaging is not desired.
-    
-    Parameters:
-    -----------
-    lat : float
-        Latitude of the point
-    lon : float
-        Longitude of the point
-    
-    Returns:
-    --------
-    dict : Dictionary containing calculated features
-    """
-    # Create point geometry
-    point = Point(lon, lat) # Note: shapely uses (lon, lat) order
-    
-    # Create GeoDataFrame with the point
-    point_gdf = gpd.GeoDataFrame(
-        {'geometry': [point]},
-        crs='EPSG:4326'
-    )
-    
-    # Convert to projected CRS (Coordinate Reference System)
-    point_gdf = point_gdf.to_crs('EPSG:3005')
-    point_geom = point_gdf.geometry.iloc[0]
-    
-    # Load bus stops data with features
-    bus_stops_df = pd.read_csv(Path("training_data") / "bus_stops_with_features.csv")
-    
-    if 'latitude' in bus_stops_df.columns and 'longitude' in bus_stops_df.columns:
-        bus_stops_gdf = gpd.GeoDataFrame(
-            bus_stops_df,
-            geometry=gpd.points_from_xy(bus_stops_df.longitude, bus_stops_df.latitude),
-            crs='EPSG:4326'
-        )
-    else:
-        bus_stops_gdf = gpd.GeoDataFrame(bus_stops_df, crs='EPSG:4326')
-    
-    bus_stops_gdf = bus_stops_gdf.to_crs('EPSG:3005')
-    
-    # Priority features
-    priority_features = [
-        'nearest_Overall_Accessibility',
-        'nearest_Commute_PT_Demand',
-        'nearest_Population_Density_Demand',
-        'nearest_Bus_Stop_Proximity',
-        'population_within_1.0km',
-        'schools_within_0.5km',
-        'healthcare_within_0.5km',
-        'route_connections'
-    ]
-    
-    # Find nearest stop
-    distances = bus_stops_gdf.geometry.distance(point_geom)
-    nearest_idx = distances.idxmin()
-    nearest_stop = bus_stops_gdf.loc[nearest_idx]
-    
-    # Extract features
-    features = {}
-    for feature in priority_features:
-        if feature == 'nearest_Bus_Stop_Proximity':
-            features[feature] = distances.min()
-        elif feature in bus_stops_gdf.columns:
-            features[feature] = nearest_stop[feature]
-        else:
-            features[feature] = 0
-    
-    return features
-
-
-def ridership_prediction(lat, lon, use_weighted=True, n_neighbors=5, max_distance_km=0.5):
+def ridership_prediction(lat, lon, n_neighbors=5, max_distance_km=1.0):
     """
     Predict ridership for a given coordinate.
     
@@ -204,12 +130,10 @@ def ridership_prediction(lat, lon, use_weighted=True, n_neighbors=5, max_distanc
         Longitude of the point
     model_path : str
         Path to the saved Random Forest Regressor model
-    use_weighted : bool
-        If True, uses weighted average from nearby stops. If False, uses nearest stop only.
     n_neighbors : int
         Number of nearby stops to consider for weighted average
     max_distance_km : float
-        Maximum distance to consider stops for weighted average - use 500 meters by default due to urban density.
+        Maximum distance to consider stops for weighted average - use 1.0 km by default due to urban density.
     
     Returns:
     --------
@@ -230,10 +154,7 @@ def ridership_prediction(lat, lon, use_weighted=True, n_neighbors=5, max_distanc
         model = model_package
     
     # Calculate features for the coordinates
-    # if use_weighted:
     features = calculate_features_for_coordinates(lat, lon, n_neighbors, max_distance_km)
-    # else:
-    #    features = calculate_features_simple(lat, lon)
     
     # Convert features to DataFrame for prediction
     feature_df = pd.DataFrame([features])
