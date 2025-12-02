@@ -1,3 +1,4 @@
+```latex
 \documentclass[runningheads]{llncs}
 %
 \usepackage[T1]{fontenc}
