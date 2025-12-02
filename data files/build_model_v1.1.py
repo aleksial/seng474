@@ -1,6 +1,6 @@
 """
 Machine Learning Models for Bus Ridership Prediction
-Polynomial Regressor - baseline model to fit non-linear data.
+Linear Regressor - baseline model to fit data for comparison.
 RandomForest Regressor - advanced model to capture complex patterns and make predictions.
 """
 
@@ -9,7 +9,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.model_selection import train_test_split, GridSearchCV, cross_val_score
-from sklearn.preprocessing import PolynomialFeatures, StandardScaler
+from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LinearRegression
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score, mean_absolute_percentage_error, r2_score
@@ -62,44 +62,39 @@ y = df[target_feature]
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
 # ============================================================================
-# 4. TRAIN BASELINE MODEL - POLYNOMIAL REGRESSION
+# 4. TRAIN BASELINE MODEL - LINEAR REGRESSION
 # ============================================================================
 
-print("\nTraining baseline model - Polynomial Regression...")
+print("\nTraining baseline model - Linear Regression...")
 
 # Scale features
 scaler = StandardScaler()
 X_train_scaled = scaler.fit_transform(X_train)
 X_test_scaled = scaler.transform(X_test)
 
-# Polynomial features
-poly = PolynomialFeatures(degree=2, include_bias=False)
-X_train_poly = poly.fit_transform(X_train_scaled)
-X_test_poly = poly.transform(X_test_scaled)
-
 # Train model
-poly_model = LinearRegression()
-poly_model.fit(X_train_poly, y_train)
+linear_model = LinearRegression()
+linear_model.fit(X_train_scaled, y_train)
 
 # Predictions
-y_train_pred_poly = poly_model.predict(X_train_poly)
-y_test_pred_poly = poly_model.predict(X_test_poly)
+y_train_pred_linear = linear_model.predict(X_train_scaled)
+y_test_pred_linear = linear_model.predict(X_test_scaled)
 
 # Calculate metrics
-poly_train_rmse = np.sqrt(mean_squared_error(y_train, y_train_pred_poly))
-poly_train_mae = mean_absolute_error(y_train, y_train_pred_poly)
-poly_train_r2 = r2_score(y_train, y_train_pred_poly)
-poly_train_mape = mean_absolute_percentage_error(y_train, y_train_pred_poly) * 100
+linear_train_rmse = np.sqrt(mean_squared_error(y_train, y_train_pred_linear))
+linear_train_mae = mean_absolute_error(y_train, y_train_pred_linear)
+linear_train_r2 = r2_score(y_train, y_train_pred_linear)
+linear_train_mape = mean_absolute_percentage_error(y_train, y_train_pred_linear) * 100
 
-poly_test_rmse = np.sqrt(mean_squared_error(y_test, y_test_pred_poly))
-poly_test_mae = mean_absolute_error(y_test, y_test_pred_poly)
-poly_test_r2 = r2_score(y_test, y_test_pred_poly)
-poly_test_mape = mean_absolute_percentage_error(y_test, y_test_pred_poly) * 100
+linear_test_rmse = np.sqrt(mean_squared_error(y_test, y_test_pred_linear))
+linear_test_mae = mean_absolute_error(y_test, y_test_pred_linear)
+linear_test_r2 = r2_score(y_test, y_test_pred_linear)
+linear_test_mape = mean_absolute_percentage_error(y_test, y_test_pred_linear) * 100
 
 # Cross-validation
-poly_cv_scores = cross_val_score(poly_model, X_train_poly, y_train, 
-                                 cv=5, scoring='r2', n_jobs=-1)
-print(f"\n5-Fold CV R² Score: {poly_cv_scores.mean():.4f} (+/- {poly_cv_scores.std():.4f})")
+linear_cv_scores = cross_val_score(linear_model, X_train_scaled, y_train, 
+                                   cv=5, scoring='r2', n_jobs=-1)
+print(f"\n5-Fold CV R² Score: {linear_cv_scores.mean():.4f} (+/- {linear_cv_scores.std():.4f})")
 
 print("\nFinished training.")
 
@@ -166,18 +161,16 @@ print("\nFinished training.")
 
 print("\nSAVING MODELS")
 
-# Save Polynomial Regression (baseline model)
-poly_package = {
-    'model': poly_model,
+# Save Linear Regression (baseline model)
+linear_package = {
+    'model': linear_model,
     'scaler': scaler,
-    'poly': poly,
-    'degree': 2,
     'feature_names': priority_features
 }
 
-# Save Polynomial Regression
-joblib.dump(poly_package, 'models/polynomial_regression_model.pkl')
-print("Saved: models/polynomial_regression_model.pkl")
+# Save Linear Regression
+joblib.dump(linear_package, 'models/linear_regression_model.pkl')
+print("Saved: models/linear_regression_model.pkl")
 
 # Save Random Forest (advanced model)
 rf_package = {
@@ -196,11 +189,11 @@ print("\nMODEL COMPARISON")
 
 comparison_df = pd.DataFrame({
     'Metric': ['RMSE', 'MAE', 'R²', 'MAPE (%)'],
-    'Polynomial Regression': [
-        poly_test_rmse,
-        poly_test_mae,
-        poly_test_r2,
-        poly_test_mape
+    'Linear Regression': [
+        linear_test_rmse,
+        linear_test_mae,
+        linear_test_r2,
+        linear_test_mape
     ],
     'Random Forest': [
         rf_test_rmse,
@@ -212,22 +205,22 @@ comparison_df = pd.DataFrame({
 
 # Calculate improvement
 comparison_df['Improvement'] = [
-    f"{((poly_test_rmse - rf_test_rmse) / poly_test_rmse * 100):.1f}%",
-    f"{((poly_test_mae - rf_test_mae) / poly_test_mae * 100):.1f}%",
-    f"{((rf_test_r2 - poly_test_r2) / poly_test_r2 * 100):.1f}%",
-    f"{((poly_test_mape - rf_test_mape) / poly_test_mape * 100):.1f}%"
+    f"{((linear_test_rmse - rf_test_rmse) / linear_test_rmse * 100):.1f}%",
+    f"{((linear_test_mae - rf_test_mae) / linear_test_mae * 100):.1f}%",
+    f"{((rf_test_r2 - linear_test_r2) / linear_test_r2 * 100):.1f}%",
+    f"{((linear_test_mape - rf_test_mape) / linear_test_mape * 100):.1f}%"
 ]
 
 print("\n" + comparison_df.to_string(index=False))
 
 # Determine winner
 print("\n" + "-" * 70)
-if rf_test_r2 > poly_test_r2:
+if rf_test_r2 > linear_test_r2:
     print("Winner: Random Forest Regression")
     print(f"Random Forest has {comparison_df.iloc[2, 3]} better R² score")
 else:
-    print("Winner: Polynomial Regression")
-    print(f"Polynomial Regression has better R² score")
+    print("Winner: Linear Regression")
+    print(f"Linear Regression has better R² score")
 print("-" * 70)
 
 # ============================================================================
@@ -238,21 +231,20 @@ print("\n" + "=" * 70)
 print("GENERATING VISUALIZATIONS")
 print("=" * 70)
 
-
 #
 # Plot: Predictions comparison
 #
 
 fig, axes = plt.subplots(1, 2, figsize=(15, 5))
 
-# Polynomial Regression
-axes[0].scatter(y_test, y_test_pred_poly, alpha=0.6, edgecolors='k', linewidth=0.5)
+# Linear Regression
+axes[0].scatter(y_test, y_test_pred_linear, alpha=0.6, edgecolors='k', linewidth=0.5)
 axes[0].plot([y_test.min(), y_test.max()], 
              [y_test.min(), y_test.max()], 
              'r--', lw=2, label='Perfect Prediction')
 axes[0].set_xlabel('Actual Ridership', fontsize=12)
 axes[0].set_ylabel('Predicted Ridership', fontsize=12)
-axes[0].set_title(f'Polynomial Regression (R²={poly_test_r2:.3f})', 
+axes[0].set_title(f'Linear Regression (R²={linear_test_r2:.3f})', 
                   fontsize=14, fontweight='bold')
 axes[0].legend()
 axes[0].grid(True, alpha=0.3)
@@ -275,13 +267,14 @@ plt.savefig('model_predictions_comparison.png', dpi=300, bbox_inches='tight')
 print("Saved: model_predictions_comparison.png")
 plt.close()
 
-
 #
 # Plot: Feature Importance for Random Forest Regression model
 #
+# This bar chart visualizes the importance of each feature used in the Random Forest model.
+# Feature importance indicates how much each feature contributes to reducing prediction error.
 
-importances = rf_model.feature_importances_     # Each importance value represents how much that feature contributes
-feature_names = priority_features               # to reducing prediction error across all trees in the Random Forest.
+importances = rf_model.feature_importances_     
+feature_names = priority_features               
 
 feat_imp_df = pd.DataFrame({
     'Feature': feature_names,
@@ -299,8 +292,12 @@ print("Saved: random_forest_feature_importance.png")
 plt.close()
 
 #
-# Grid Search Hyperparameter Heatmap
+# Plot Grid Search Hyperparameter Heatmap
 #
+# This heatmap visualizes the mean test scores from the grid search
+# across different combinations of 'n_estimators' and 'max_depth'.
+# The color intensity indicates the performance of the model with those hyperparameters.
+# The optimal combination was identified to be n_estimators=300 and max_depth=20.
 
 grid_results = pd.DataFrame(grid_search.cv_results_)
 pivot_table = grid_results.pivot_table(
